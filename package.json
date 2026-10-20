@@ -1,4 +1,12 @@
 {
+  "name": "gausial-arunika",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
   "dependencies": {
     "lucide-react": "^1.60.0",
     "react": "^19.3.1",
@@ -10,3 +18,4 @@
     "vite": "^8.2.2"
   }
 }
+
