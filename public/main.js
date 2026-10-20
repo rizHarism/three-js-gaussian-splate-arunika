@@ -3,12 +3,15 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { SPZLoader } from "three/addons/loaders/SPZLoader.js";
 import { GaussianSplat } from "three/addons/objects/GaussianSplat.js";
 
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
 const loadingOverlay = document.getElementById("loading-overlay");
 const progressBar = document.getElementById("progress-bar");
 const statusText = document.getElementById("status-text");
 const errorOverlay = document.getElementById("error-overlay");
 const errorMessage = document.getElementById("error-message");
 const retryBtn = document.getElementById("retry-btn");
+
 THREE.ColorManagement.workingColorSpace = THREE.SRGBColorSpace;
 
 if (retryBtn) {
@@ -133,7 +136,7 @@ function loadModel(url, scene, camera, controls) {
 
           // 4. Atur posisi kamera mendekat (Zoom-In) ke titik spesifik tersebut dari Kiri Atas
           // Gunakan pengali radius yang kecil (misal 0.5 s/d 0.8) karena kita ingin close-up/zoom-in
-          const closeUpFactor = 0.6;
+          const closeUpFactor = 0.8;
 
           camera.position.set(
             specificTarget.x + radius * closeUpFactor, // UBAH KE POSITIF (+) untuk menggeser kamera ke arah Timur (Kanan)
@@ -215,39 +218,32 @@ function loadModel(url, scene, camera, controls) {
       );
     },
   );
+
+  // helper to get coordinate when click mouse gausian object
+
+  window.addEventListener("click", (event) => {
+    // 2. Convert the raw mouse click position into Normalized Device Coordinates (-1 to +1)
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+    // 3. Update the ray caster with the camera and mouse position
+    raycaster.setFromCamera(mouse, camera);
+
+    // 4. Calculate objects intersecting the picking ray
+    // (Pass 'scene.children' to test against everything, or an array of specific meshes)
+    const intersects = raycaster.intersectObjects(scene.children, true);
+
+    // 5. If the ray hit an object, log the coordinates
+    if (intersects.length > 0) {
+      // 'point' contains the precise Vector3 (X, Y, Z) coordinates of the click
+      const clickPoint = intersects[0].point;
+
+      console.log("Clicked 3D Coordinates:", clickPoint);
+      console.log(`X: ${clickPoint.x}, Y: ${clickPoint.y}, Z: ${clickPoint.z}`);
+    } else {
+      console.log("Clicked into empty space (no object hit).");
+    }
+  });
 }
 
 init();
-
-// 1. Create your HTML button dynamically or have it in your HTML
-const button = document.createElement("button");
-button.innerText = "Click Me";
-button.style.position = "absolute";
-document.body.appendChild(button);
-
-// 2. Define the 3D object you want to follow
-const myObject = new THREE.Mesh(geometry, material);
-scene.add(myObject);
-
-// 3. Inside your animation loop, map 3D coordinates to 2D screen coordinates
-function animate() {
-  requestAnimationFrame(animate);
-  renderer.render(scene, camera);
-
-  // Create a vector representing the position just above your object
-  const targetPosition = new THREE.Vector3();
-  myObject.getWorldPosition(targetPosition);
-  targetPosition.y += 1.5; // Offset it so it floats *above* the object
-
-  // Project the 3D position to 2D screen space
-  targetPosition.project(camera);
-
-  // Convert the normalized coordinates (-1 to +1) to CSS pixels
-  const x = (targetPosition.x * 0.5 + 0.5) * window.innerWidth;
-  const y = (targetPosition.y * -0.5 + 0.5) * window.innerHeight;
-
-  // Apply positions to the HTML button
-  button.style.left = `${x}px`;
-  button.style.top = `${y}px`;
-}
-animate();
