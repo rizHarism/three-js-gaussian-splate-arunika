@@ -52,7 +52,7 @@ export class SceneManager {
     this.clock.start();
 
     this.renderer.setAnimationLoop(() => {
-      const delta = this.clock.getDelta();
+      const delta = Math.min(this.clock.getDelta(), 0.1);
 
       this.controls.update();
 

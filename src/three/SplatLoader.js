@@ -7,6 +7,7 @@ export class SplatLoader {
   constructor() {
     this.loader = new SPZLoader();
     this.splatMesh = null;
+    this.isDisposed = false;
   }
 
   load(url, scene, camera, controls, callbacks = {}) {
@@ -15,6 +16,11 @@ export class SplatLoader {
     this.loader.load(
       url,
       (geometry) => {
+        if (this.isDisposed) {
+          geometry.dispose();
+          return;
+        }
+
         try {
           const splat = new GaussianSplat(geometry);
           scene.add(splat);
@@ -47,7 +53,7 @@ export class SplatLoader {
               specificTarget
             );
             offset.applyAxisAngle(
-              new THREE.Vector3(1, -3, 0),
+              new THREE.Vector3(1, -3, 0).normalize(),
               CONFIG.FRAMING_ROTATION_ANGLE
             );
             camera.position.copy(specificTarget).add(offset);
@@ -82,8 +88,12 @@ export class SplatLoader {
   }
 
   dispose(scene) {
-    if (this.splatMesh && scene) {
-      scene.remove(this.splatMesh);
+    this.isDisposed = true;
+    if (this.splatMesh) {
+      if (scene) {
+        scene.remove(this.splatMesh);
+      }
+      this.splatMesh.material?.dispose();
       if (this.splatMesh.geometry) {
         this.splatMesh.geometry.dispose();
       }
