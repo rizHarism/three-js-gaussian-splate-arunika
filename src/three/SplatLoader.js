@@ -45,16 +45,16 @@ export class SplatLoader {
             camera.position.set(
               specificTarget.x + radius * closeUpFactor,
               specificTarget.y + radius * closeUpFactor,
-              specificTarget.z + radius * closeUpFactor
+              specificTarget.z + radius * closeUpFactor,
             );
 
             const offset = new THREE.Vector3().subVectors(
               camera.position,
-              specificTarget
+              specificTarget,
             );
             offset.applyAxisAngle(
               new THREE.Vector3(1, -3, 0).normalize(),
-              CONFIG.FRAMING_ROTATION_ANGLE
+              CONFIG.FRAMING_ROTATION_ANGLE,
             );
             camera.position.copy(specificTarget).add(offset);
 
@@ -77,13 +77,14 @@ export class SplatLoader {
               ? Math.min(100, Math.round((xhr.loaded / xhr.total) * 100))
               : Math.min(95, Math.round((xhr.loaded / (130 * 1048576)) * 100));
           const loadedMB = (xhr.loaded / 1048576).toFixed(1);
-          const totalMB = xhr.total > 0 ? (xhr.total / 1048576).toFixed(1) : "130.0";
+          const totalMB =
+            xhr.total > 0 ? (xhr.total / 1048576).toFixed(1) : "130.0";
           onProgress({ percent, loadedMB, totalMB });
         }
       },
       (err) => {
         if (onError) onError(err);
-      }
+      },
     );
   }
 

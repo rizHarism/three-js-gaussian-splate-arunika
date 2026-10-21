@@ -19,7 +19,6 @@ export function createPowerFloatingLabelElement(initialWatts = 0) {
         ${zapIconSvg}
       </div>
       <div class="label-body">
-        <span class="label-tag">METER LISTRIK</span>
         <div class="label-stat-row">
           <span id="power-watt-value" class="watt-glow-text">${initialWatts.toLocaleString()} W</span>
         </div>
