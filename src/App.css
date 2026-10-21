@@ -161,6 +161,162 @@ canvas {
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
 }
 
+/* Futuristic Cyber Loader */
+.futuristic-loader {
+  position: relative;
+  overflow: hidden;
+  max-width: 440px;
+  background: rgba(13, 17, 28, 0.94);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  box-shadow: 0 0 50px rgba(56, 189, 248, 0.15), 0 20px 40px rgba(0, 0, 0, 0.7);
+}
+
+.loader-ambient-glow {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.cyber-gyro-container {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 16px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gyro-ring {
+  position: absolute;
+  border-radius: 50%;
+}
+
+.ring-outer {
+  inset: 0;
+  border: 2px dashed rgba(56, 189, 248, 0.6);
+  animation: gyroSpinClockwise 8s linear infinite;
+}
+
+.ring-inner {
+  inset: 10px;
+  border: 2px solid transparent;
+  border-top-color: #818cf8;
+  border-bottom-color: #38bdf8;
+  animation: gyroSpinCounter 3s linear infinite;
+}
+
+.gyro-core-brand {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.brand-logo-symbol {
+  font-size: 20px;
+  color: #38bdf8;
+  animation: brandPulse 2s ease-in-out infinite;
+}
+
+@keyframes gyroSpinClockwise {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes gyroSpinCounter {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-360deg); }
+}
+
+@keyframes brandPulse {
+  0%, 100% { transform: scale(1); opacity: 0.8; text-shadow: 0 0 10px rgba(56, 189, 248, 0.5); }
+  50% { transform: scale(1.15); opacity: 1; text-shadow: 0 0 18px rgba(56, 189, 248, 0.9); }
+}
+
+.loading-percent-display {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 2px;
+  margin: 10px 0 12px 0;
+}
+
+.percent-num {
+  font-size: 36px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #38bdf8, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.percent-unit {
+  font-size: 14px;
+  font-weight: 700;
+  color: #818cf8;
+}
+
+.shimmer-track {
+  position: relative;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  height: 8px;
+}
+
+.progress-shimmer-wave {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+  animation: shimmerMove 1.5s infinite;
+}
+
+@keyframes shimmerMove {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.loading-pipeline-steps {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 10px;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.step-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: color 0.3s ease;
+}
+
+.step-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #475569;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.step-item.active {
+  color: #94a3b8;
+}
+
+.step-item.active .step-dot {
+  background: #38bdf8;
+  box-shadow: 0 0 6px #38bdf8;
+}
+
 #spinner {
   width: 44px;
   height: 44px;
@@ -280,7 +436,7 @@ canvas {
   top: 20px;
   right: 20px;
   width: 320px;
-  bottom: 20px;
+  max-height: calc(100vh - 40px);
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -305,8 +461,7 @@ canvas {
 }
 
 .sidebar-panel-bottom {
-  flex: 1;
-  overflow-y: auto;
+  overflow: hidden;
 }
 
 /* 3D Floating Labels */
@@ -342,25 +497,158 @@ canvas {
   box-shadow: 0 0 8px #22c55e;
 }
 
-/* CCTV Modal */
-.modal-backdrop {
+/* CCTV Drawer (Non-blocking Left Panel) */
+.cctv-drawer-panel {
   position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  top: 85px;
+  left: 20px;
+  width: 340px;
+  max-width: calc(100vw - 40px);
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+  z-index: 25;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform: translateX(-120%);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+}
+
+.cctv-drawer-panel.open {
+  transform: translateX(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.cctv-drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.cctv-drawer-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #f8fafc;
+}
+
+.cctv-live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #22c55e;
+  box-shadow: 0 0 8px #22c55e;
+  animation: pulseDot 1.5s infinite;
+}
+
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.85); }
+}
+
+.cctv-close-btn {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 100;
+  transition: color 0.15s, background-color 0.15s;
 }
 
-.modal-card {
-  background: rgba(15, 23, 42, 0.95);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 18px;
-  width: 90%;
-  max-width: 520px;
+.cctv-close-btn:hover {
+  color: #f8fafc;
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.cctv-screen-viewport {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #030712;
   overflow: hidden;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8);
+}
+
+.cctv-simulated-screen {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 10px 12px;
+  background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
+  font-family: monospace;
+  font-size: 10px;
+  color: #94a3b8;
+}
+
+.cctv-overlay-scanline {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.35) 50%),
+              linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+  background-size: 100% 3px, 4px 100%;
+  pointer-events: none;
+}
+
+.cctv-osd-top, .cctv-osd-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 2;
+}
+
+.cctv-badge-live {
+  color: #ef4444;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.cctv-center-crosshair {
+  align-self: center;
+  text-align: center;
+  z-index: 2;
+  opacity: 0.7;
+}
+
+.crosshair-target {
+  width: 32px;
+  height: 32px;
+  border: 1px dashed rgba(56, 189, 248, 0.5);
+  border-radius: 50%;
+  margin: 0 auto 4px auto;
+}
+
+.cctv-channel-name {
+  color: #38bdf8;
+  font-size: 10px;
+  letter-spacing: 0.05em;
+}
+
+.cctv-drawer-footer {
+  padding: 10px 16px;
+  background: rgba(0, 0, 0, 0.2);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.cctv-status-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: #cbd5e1;
 }

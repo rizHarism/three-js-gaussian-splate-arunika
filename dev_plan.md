@@ -52,11 +52,20 @@ Menyesuaikan tampilan Splat dengan data API Cuaca dan waktu sistem komputer.
 
 ## 🛠️ Langkah Pengerjaan Berikutnya
 
-1.  [ ] Setup dasar Three.js + Gaussian Splat loader.
-2.  [ ] Memasukkan `CSS2DRenderer` ke dalam scene untuk membuat label `<div>` pertama di titik kordinat tertentu.
-3.  [ ] Membuat script _fetch_ ke OpenWeatherMap.
-4.  [ ] Mengirim data cuaca ke label CSS2D.
+1.  [x] Setup dasar Three.js + Gaussian Splat loader.
+2.  [x] Memasukkan `CSS2DRenderer` ke dalam scene untuk membuat label `<div>` pertama di titik kordinat tertentu.
+3.  [x] Membuat script _fetch_ ke OpenWeatherMap.
+4.  [x] Mengirim data cuaca ke label CSS2D & Dashboard Sidebar.
+5.  [x] Simulasi sensor daya listrik (IoT Mock) & modal CCTV.
+6.  [x] Sinkronisasi Visual Cuaca & Lingkungan (`EnvironmentManager` partikel hujan).
 
 ## agent progress until now,
 
-task 3 done - create the folder and structure code
+Task 1-7 completed:
+- Core 3D modularization (SceneManager, SplatLoader)
+- React UI migration (HUD, Loading/Error Overlay)
+- CSS2DRenderer floating labels (Power Meter & CCTV)
+- Services (weatherService with real OWM API & iotSimulationService)
+- Glassmorphism Sidebar Dashboard (WeatherCard, PowerWidget, AboutPanel)
+- CCTV Modal (interactive popup)
+- EnvironmentManager (5000 rain particles, scene background tone sync)
