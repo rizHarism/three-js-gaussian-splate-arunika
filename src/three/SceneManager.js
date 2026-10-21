@@ -13,7 +13,7 @@ export class SceneManager {
     this.controls = null;
     this.labelRenderer = null;
     this.environmentManager = null;
-    this.clock = new THREE.Clock();
+    this.timer = new THREE.Timer();
     this._resizeHandler = this._handleResize.bind(this);
 
     this._init();
@@ -34,12 +34,12 @@ export class SceneManager {
       CONFIG.CAMERA_FOV,
       window.innerWidth / window.innerHeight,
       CONFIG.CAMERA_NEAR,
-      CONFIG.CAMERA_FAR
+      CONFIG.CAMERA_FAR,
     );
     this.camera.position.set(
       CONFIG.CAMERA_POSITION.x,
       CONFIG.CAMERA_POSITION.y,
-      CONFIG.CAMERA_POSITION.z
+      CONFIG.CAMERA_POSITION.z,
     );
 
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
@@ -49,10 +49,11 @@ export class SceneManager {
 
     window.addEventListener("resize", this._resizeHandler);
 
-    this.clock.start();
+    // this.clock.start();
 
-    this.renderer.setAnimationLoop(() => {
-      const delta = Math.min(this.clock.getDelta(), 0.1);
+    this.renderer.setAnimationLoop((timestamp) => {
+      this.timer.update(timestamp);
+      const delta = Math.min(this.timer.getDelta(), 0.1);
 
       this.controls.update();
 
@@ -111,7 +112,9 @@ export class SceneManager {
     if (this.renderer) {
       this.renderer.setAnimationLoop(null);
       if (this.renderer.domElement && this.renderer.domElement.parentNode) {
-        this.renderer.domElement.parentNode.removeChild(this.renderer.domElement);
+        this.renderer.domElement.parentNode.removeChild(
+          this.renderer.domElement,
+        );
       }
       this.renderer.dispose();
     }
