@@ -81,19 +81,25 @@ flowchart TD
   * Di `src/constants/config.js`, nilai `MAX_RAIN_PARTICLES` dinaikkan dari `5000` menjadi `10000` agar partikel tetap tampak padat dan berkesan lebat di area luas.
 
 ### 3.2 Viewport3D.jsx — Raycaster Console Coordinate Picker
-* **Mekanisme Anti-Drag:**
+* **Mekanisme Anti-Drag & Event Target:**
+  * Event listener dipasang pada elemen kanvas/kontainer (`canvasContainerRef`), bukan `window`, untuk mencegah salah picu saat pengguna mengklik tombol-tombol UI/HUD (Title Badge, Sidebar, Drawer CCTV, dsb).
+  * Menghitung Normalized Device Coordinates (NDC) menggunakan `rect = container.getBoundingClientRect()`:
+    ```javascript
+    mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+    mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+    ```
   * Merekam titik `(startX, startY)` pada event `pointerdown`.
   * Saat `pointerup`:
     * Menghitung $\Delta = \sqrt{(e.clientX - startX)^2 + (e.clientY - startY)^2}$.
     * Jika $\Delta \ge 5\text{ px}$, event diabaikan (karena pengguna sedang melakukan rotasi/panning dengan OrbitControls).
     * Jika $\Delta < 5\text{ px}$, inisialisasi Raycaster:
       ```javascript
-      mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-      mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
       raycaster.setFromCamera(mouse, camera);
-      const hits = raycaster.intersectObjects(scene.children, true);
+      const rawHits = raycaster.intersectObjects(scene.children, true);
+      // PENTING: Filter partikel hujan (THREE.Points) agar berkas raycast tidak terhalang titik air di udara
+      const hits = rawHits.filter((hit) => !hit.object.isPoints && hit.object.type !== "Points");
       ```
-  * Jika ditemukan titik temu (`hits.length > 0`):
+  * Jika ditemukan titik temu pada permukaan model (`hits.length > 0`):
     * Titik pertama `const pt = hits[0].point`.
     * Cetak ke console dengan banner visual berlatar biru:
       ```javascript
@@ -109,11 +115,14 @@ flowchart TD
 ### 3.3 CctvDrawer.jsx — Non-Blocking Left Panel
 * **Lokasi File:** `src/components/dashboard/CctvDrawer.jsx` (menggantikan `src/components/modals/CctvModal.jsx`).
 * **Positioning & Layout:**
-  * CSS: `position: fixed; top: 85px; left: 20px; width: 340px; z-index: 25;`
+  * CSS: `position: fixed; top: 85px; left: 20px; width: 340px; max-width: calc(100vw - 40px); z-index: 25;` (responsif aman di layar ponsel).
   * Animasi slide-out:
     * Tertutup: `transform: translateX(-120%); opacity: 0; pointer-events: none;`
     * Terbuka: `transform: translateX(0); opacity: 1; pointer-events: auto;`
     * Durasi: `transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;`
+* **Penyaluran Nama Kamera Dinamis:**
+  * `Viewport3D.jsx` memanggil `onCctvClick("CCTV Depan")` atau `onCctvClick("CCTV Kiri")`.
+  * `App.jsx` mengelola state `activeCctvName` dan meneruskannya ke `<CctvDrawer cctvName={activeCctvName} ... />`.
 * **Komponen Konten:**
   * Header: Judul Kamera (`cctvName`), indikator kedip hijau *LIVE FEED*, dan tombol tutup silang (`X`).
   * Video Viewport: Rasio 16:9 dengan overlay visual CCTV:
