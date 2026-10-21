@@ -10,8 +10,8 @@ export const CONFIG = {
 
   // Framing Offset (applied after bounds calculation)
   FRAMING_OFFSET: { x: 10.0, y: 6.0, z: 1.0 },
-  FRAMING_CLOSE_UP_FACTOR: 0.8,
-  FRAMING_ROTATION_ANGLE: Math.PI / 18, // 10 degrees
+  FRAMING_CLOSE_UP_FACTOR: 0.7,
+  FRAMING_ROTATION_ANGLE: Math.PI / 5, // 10 degrees
 
   // Weather Service
   OWM_BASE_URL: "https://api.openweathermap.org/data/2.5/weather",
