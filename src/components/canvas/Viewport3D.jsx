@@ -57,20 +57,20 @@ export default function Viewport3D({
 
       // Filter out rain particles (THREE.Points) so airborne raindrops don't block clicks
       const hits = rawHits.filter(
-        (hit) => !hit.object.isPoints && hit.object.type !== "Points"
+        (hit) => !hit.object.isPoints && hit.object.type !== "Points",
       );
 
       if (hits.length > 0) {
         const pt = hits[0].point;
         console.log(
           `%c📍 Picked 3D Coordinate: { x: ${pt.x.toFixed(2)}, y: ${pt.y.toFixed(2)}, z: ${pt.z.toFixed(2)} }`,
-          "background: #0284c7; color: #ffffff; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-family: monospace;"
+          "background: #0284c7; color: #ffffff; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-family: monospace;",
         );
         console.log("Vector3 object:", pt);
       } else {
         console.log(
           "%cClicked into empty space (no surface hit).",
-          "color: #94a3b8; font-style: italic;"
+          "color: #94a3b8; font-style: italic;",
         );
       }
     };
@@ -90,7 +90,7 @@ export default function Viewport3D({
       // Initialize EnvironmentManager (Rain particles & environment tone)
       const envManager = new EnvironmentManager(
         sceneManager.getScene(),
-        sceneManager.getRenderer()
+        sceneManager.getRenderer(),
       );
       envManagerRef.current = envManager;
       sceneManager.setEnvironmentManager(envManager);
@@ -112,40 +112,58 @@ export default function Viewport3D({
         {
           onProgress: ({ percent, loadedMB, totalMB }) => {
             if (onLoadProgress) {
-              onLoadProgress(percent, `Loaded ${loadedMB} MB / ${totalMB} MB (${percent}%)`);
+              onLoadProgress(
+                percent,
+                `Loaded ${loadedMB} MB / ${totalMB} MB (${percent}%)`,
+              );
             }
           },
           onLoad: () => {
             // Mount floating labels after splat loads successfully
             const powerEl = createPowerFloatingLabelElement(0);
-            labelRenderer.addLabel("power-meter", powerEl, CONFIG.LABEL_POWER_METER, scene);
-
-            const cctvRightEl = createCctvFloatingLabelElement("CCTV Depan", () =>
-              onCctvClick?.("CCTV Depan (Kanan)")
+            labelRenderer.addLabel(
+              "power-meter",
+              powerEl,
+              CONFIG.LABEL_POWER_METER,
+              scene,
             );
-            labelRenderer.addLabel("cctv-right", cctvRightEl, CONFIG.LABEL_CCTV_RIGHT, scene);
 
-            const cctvLeftEl = createCctvFloatingLabelElement("CCTV Kiri", () =>
-              onCctvClick?.("CCTV Area Kiri")
+            const cctvRightEl = createCctvFloatingLabelElement("CCTV", () =>
+              onCctvClick?.("CCTV Area Depan"),
             );
-            labelRenderer.addLabel("cctv-left", cctvLeftEl, CONFIG.LABEL_CCTV_LEFT, scene);
+            labelRenderer.addLabel(
+              "cctv-right",
+              cctvRightEl,
+              CONFIG.LABEL_CCTV_RIGHT,
+              scene,
+            );
+
+            const cctvLeftEl = createCctvFloatingLabelElement("CCTV", () =>
+              onCctvClick?.("CCTV Area Kiri"),
+            );
+            labelRenderer.addLabel(
+              "cctv-left",
+              cctvLeftEl,
+              CONFIG.LABEL_CCTV_LEFT,
+              scene,
+            );
 
             if (onLoadComplete) onLoadComplete();
           },
           onError: (err) => {
             if (onLoadError) {
               onLoadError(
-                err?.message || "Failed to load Gaussian Splat model on GPU."
+                err?.message || "Failed to load Gaussian Splat model on GPU.",
               );
             }
           },
-        }
+        },
       );
     } catch (err) {
       if (onLoadError) {
         onLoadError(
           "WebGPU is not supported or hardware acceleration is disabled. " +
-            (err?.message || err)
+            (err?.message || err),
         );
       }
     }

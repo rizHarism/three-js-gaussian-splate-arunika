@@ -21,8 +21,6 @@ export function createCctvFloatingLabelElement(label = "CCTV Front", onClick) {
       </div>
       <div class="label-body">
         <div class="cctv-header-row">
-          <span class="label-tag">SURVEILLANCE</span>
-          <span class="cctv-live-badge"><span class="cctv-rec-dot"></span>LIVE</span>
         </div>
         <span class="cctv-name-text">${label}</span>
       </div>
