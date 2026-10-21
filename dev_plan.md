@@ -56,3 +56,7 @@ Menyesuaikan tampilan Splat dengan data API Cuaca dan waktu sistem komputer.
 2.  [ ] Memasukkan `CSS2DRenderer` ke dalam scene untuk membuat label `<div>` pertama di titik kordinat tertentu.
 3.  [ ] Membuat script _fetch_ ke OpenWeatherMap.
 4.  [ ] Mengirim data cuaca ke label CSS2D.
+
+## agent progress until now,
+
+task 3 done - create the folder and structure code
